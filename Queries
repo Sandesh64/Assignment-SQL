@@ -1,0 +1,52 @@
+SELECT EmpId
+FROM EmployeeDetails
+WHERE EmpId NOT IN (SELECT EmpId FROM EmployeeSalary);
+
+
+SELECT EmpId, FullName
+FROM EmployeeDetails
+WHERE EmpId NOT IN (SELECT EmpId FROM EmployeeSalary WHERE Project IS NOT NULL);
+
+
+SELECT EmpId, FullName, DateOfJoining
+FROM EmployeeDetails
+WHERE YEAR(DateOfJoining) = 2020;
+
+
+SELECT ed.EmpId, ed.FullName
+FROM EmployeeDetails ed
+INNER JOIN EmployeeSalary es ON ed.EmpId = es.EmpId;
+
+
+SELECT Project, COUNT(*) AS EmployeeCount
+FROM EmployeeSalary
+GROUP BY Project;
+
+
+SELECT ed.EmpId, ed.FullName, es.Salary
+FROM EmployeeDetails ed
+LEFT JOIN EmployeeSalary es ON ed.EmpId = es.EmpId;
+
+
+SELECT ed.EmpId, ed.FullName
+FROM EmployeeDetails ed
+WHERE ed.EmpId IN (SELECT ManagerId FROM EmployeeDetails);
+
+
+SELECT EmpId, FullName, ManagerId, DateOfJoining, City
+FROM EmployeeDetails
+GROUP BY EmpId, FullName, ManagerId, DateOfJoining, City
+HAVING COUNT(*) > 1;
+
+
+SELECT *
+FROM (
+  SELECT *, ROW_NUMBER() OVER (ORDER BY EmpId) AS RowNum
+  FROM EmployeeDetails
+) AS emp WHERE RowNum % 2 = 1;
+
+
+SELECT Salary
+FROM EmployeeSalary
+ORDER BY Salary DESC
+OFFSET 2 ROWS FETCH NEXT 1 ROWS ONLY;
